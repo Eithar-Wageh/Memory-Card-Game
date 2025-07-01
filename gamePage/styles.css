@@ -1,0 +1,714 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #F8F1E9, #C68E17); /* تدرج من البيج الفاتح إلى الذهبي الداكن */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* نجوم الخلفية مع توزيع عشوائي ووميض */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(#fff 1px, transparent 1px),
+        radial-gradient(#fff 1px, transparent 1px);
+    background-size: 60px 70px, 50px 65px; /* أحجام غير متساوية لتوزيع عشوائي */
+    background-position: 5px 10px, 20px 25px; /* مواقع متباعدة للتأثير العشوائي */
+    opacity: 0.5;
+    animation: starGlow 10s infinite ease-in-out;
+    z-index: 0; /* خلف game-container */
+}
+
+/* طبقة إضافية للنجوم القليلة لمزيد من العشوائية */
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(#fff 0.7px, transparent 0.7px),
+        radial-gradient(#fff 0.7px, transparent 0.7px);
+    background-size: 80px 90px, 70px 85px; /* مساحات أكبر للنجوم القليلة */
+    background-position: 15px 20px, 30px 35px; /* إزاحة للتأثير العشوائي */
+    opacity: 0.4;
+    animation: starGlow 14s infinite ease-in-out reverse;
+    z-index: 0; /* خلف game-container */
+}
+
+@keyframes starGlow {
+    0% { opacity: 0.5; transform: scale(1) translateY(0); }
+    50% { opacity: 0.9; transform: scale(1.03) translateY(-2px); } /* حركة سلسة */
+    100% { opacity: 0.5; transform: scale(1) translateY(0); }
+}
+
+#game-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 1200px;
+    min-height: 85vh;
+    gap: 20px;
+    position: relative;
+    z-index: 2;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#stats-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 20%;
+    min-width: 120px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.2); /* أبيض شفاف */
+    backdrop-filter: blur(8px);
+    border-radius: 24px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(218, 165, 32, 0.3); /* ذهبي */
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.2em;
+    color: #FFFFFF; /* أبيض للنصوص */
+    margin: 12px 0;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.stat-icon {
+    width: 24px;
+    height: 24px;
+    fill: #DAA520; /* ذهبي */
+    stroke: #DAA520;
+}
+
+#message {
+    font-size: 1.4em;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+    margin-top: 12px;
+    text-align: center;
+}
+
+#game-board {
+    width: 78%; /* توسيع لملء المساحة اليمنى */
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.2); /* أبيض شفاف */
+    backdrop-filter: blur(8px);
+    border-radius: 24px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(218, 165, 32, 0.3); /* ذهبي */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    box-sizing: border-box;
+}
+
+#game-grid {
+    display: grid;
+    gap: 12px;
+    padding: 14px;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    min-width: 0;
+    min-height: 0;
+    margin-left: 30px; /* توسيط الشبكة */
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/back.png');
+    background-size: cover;
+    background-position: center;
+    border: 2px solid rgba(218, 165, 32, 0.4); /* ذهبي */
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    aspect-ratio: 1/1;
+    position: relative;
+    min-width: 48px;
+    min-height: 48px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card.click-effect {
+    animation: cardFlip 0.3s ease forwards;
+}
+
+@keyframes cardFlip {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+.card:hover {
+    transform: scale(1.07);
+    box-shadow: 0 6px 12px rgba(218, 165, 32, 0.3);
+}
+
+.card.flipped {
+    background-image: none;
+    background-color: rgba(255, 255, 255, 0.95); /* أبيض */
+}
+
+.card.matched {
+    border: 2px solid #FFD700; /* ذهبي مشرق */
+}
+
+.card.magic-card {
+    border: 2px solid #DAA520; /* ذهبي */
+    animation: glow 1.5s infinite;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 10;
+}
+
+.card.magic-card .progress-bar {
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.3); /* أبيض شفاف */
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 5px rgba(218, 165, 32, 0.4); /* ذهبي */
+    display: block;
+    z-index: 10;
+}
+
+.card.magic-card .progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--progress, 100%);
+    background-color: #DAA520; /* ذهبي */
+    transition: width 0.1s linear;
+    animation: glow 1.5s infinite;
+}
+
+.card.magic-card.matched {
+    animation: vibrate 0.4s ease;
+}
+
+.card.shake {
+    animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-2px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes vibrate {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-1px); }
+    50% { transform: translateX(1px); }
+    75% { transform: translateX(-1px); }
+    100% { transform: translateX(0); }
+}
+
+.card.spam-card .bomb {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card.spam-card .bomb-icon {
+    width: 100%;
+    height: 100%;
+    fill: #DAA520; /* ذهبي */
+}
+
+.card.spam-card .countdown {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #DAA520; /* ذهبي */
+    color: #FFFFFF; /* أبيض */
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.card.spam-card.explode .bomb {
+    animation: explode 1.2s ease-in-out forwards;
+}
+
+@keyframes explode {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(2.5); opacity: 0.7; }
+    100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+}
+
+.card.shuffle-fly {
+    animation: shuffle-fly 3s ease-in-out forwards;
+    z-index: 100;
+}
+
+@keyframes shuffle-fly {
+    0% { transform: translate(0, 0) rotate(0); }
+    50% { transform: translate(var(--translate-x), var(--translate-y)) rotate(var(--rotate)); }
+    100% { transform: translate(var(--translate-x), var(--translate-y)) rotate(var(--rotate)); }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px #DAA520; }
+    50% { box-shadow: 0 0 12px #DAA520; }
+    100% { box-shadow: 0 0 5px #DAA520; }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(198, 142, 23, 0.6); /* ذهبي داكن شفاف */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.modal-content {
+    background: linear-gradient(to top left, #C68E17, #8B4513); /* تدرج من الذهبي الداكن إلى البني */
+    padding: 25px;
+    border-radius: 24px;
+    text-align: center;
+    width: 90%;
+    max-width: 420px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid #DAA520; /* ذهبي */
+    transform: scale(0.7);
+    animation: popUpWin 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes popUpWin {
+    0% { transform: scale(0.7); }
+    100% { transform: scale(1); }
+}
+
+#modal-title, #scores-stats h2 {
+    font-size: 2em;
+    color: #FFFFFF; /* أبيض */
+    margin-bottom: 20px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+#modal-stats, #scores-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #FFFFFF;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.modal-stat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0;
+    width: 100%;
+    justify-content: center;
+}
+
+.modal-stat-icon {
+    width: 24px;
+    height: 24px;
+    fill: #DAA520; /* ذهبي */
+    stroke: #DAA520;
+}
+
+#modal-previous-scores {
+    margin-top: 20px;
+    text-align: left;
+    width: 100%;
+}
+
+#modal-previous-scores h3 {
+    font-size: 1.2em;
+    margin-bottom: 12px;
+    color: #FFFFFF;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+#previous-scores-list {
+    list-style: none;
+    padding: 0;
+    max-height: 140px;
+    overflow-y: auto;
+}
+
+#previous-scores-list li {
+    font-size: 1em;
+    margin-bottom: 10px;
+    padding: 8px;
+    background: rgba(218, 165, 32, 0.1); /* ذهبي شفاف */
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#previous-scores-list li span.score {
+    font-weight: bold;
+    color: #DAA520; /* ذهبي */
+}
+
+#previous-scores-list li span.date {
+    font-size: 0.9em;
+    color: #FFFFFF; /* أبيض */
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.modal-buttons button, #reset-scores {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: all 0.3s;
+    background-color: #DAA520; /* ذهبي */
+    color: #FFFFFF; /* أبيض */
+    flex: 1;
+    max-width: 170px;
+}
+
+#reset-scores {
+    background-color: #DAA520; /* ذهبي */
+    margin-top: 15px;
+    width: 100%;
+    max-width: none;
+}
+
+.modal-buttons button:hover, #reset-scores:hover {
+    background-color: #FFD700; /* ذهبي مشرق */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.icon-button {
+    position: absolute;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 100;
+    transition: transform 0.2s, filter 0.2s;
+}
+
+.icon-button:hover {
+    transform: scale(1.15);
+    animation: pulse 1s infinite;
+}
+
+.icon-button:active {
+    transform: scale(0.9);
+}
+
+@keyframes pulse {
+    0% { filter: drop-shadow(0 0 5px rgba(218, 165, 32, 0.4)); }
+    50% { filter: drop-shadow(0 0 10px rgba(218, 165, 32, 0.6)); }
+    100% { filter: drop-shadow(0 0 5px rgba(218, 165, 32, 0.4)); }
+}
+
+.icon-button .icon {
+    width: 32px;
+    height: 32px;
+    fill: #DAA520; /* ذهبي */
+    stroke: #DAA520;
+    transition: fill 0.2s, stroke 0.2s;
+}
+
+.icon-button:hover .icon {
+    stroke: #FFFFFF; /* أبيض */
+}
+
+.icon-button:active .icon {
+    fill: #FFD700; /* ذهبي مشرق */
+}
+
+#back-button {
+    top: 12px;
+    left: 12px;
+}
+
+#trophy-button {
+    top: 12px;
+    left: 60px; /* بجانب زر العودة */
+}
+
+/* تصميم متجاوب */
+@media (max-width: 768px) {
+    #game-container {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        min-height: auto;
+        padding: 8px;
+    }
+
+    #stats-panel {
+        width: 100%;
+        min-width: auto;
+        padding: 12px;
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .stat-item {
+        font-size: 1em;
+        margin: 6px 0;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .stat-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    #message {
+        font-size: 1.2em;
+        margin-top: 8px;
+        width: 100%;
+        text-align: center;
+    }
+
+    #game-board {
+        width: 100%;
+        padding: 12px;
+        min-height: 55vh;
+    }
+
+    #game-grid {
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .card {
+        min-width: 40px;
+        min-height: 40px;
+        border-radius: 10px;
+    }
+
+    .card.magic-card .progress-bar {
+        height: 5px;
+        width: 80%;
+    }
+
+    .card.spam-card .bomb {
+        width: 50px;
+        height: 50px;
+    }
+
+    .card.spam-card .countdown {
+        width: 16px;
+        height: 16px;
+        font-size: 9px;
+    }
+
+    .modal-content {
+        padding: 15px;
+        width: 95%;
+        max-width: 360px;
+    }
+
+    #modal-title, #scores-stats h2 {
+        font-size: 1.6em;
+    }
+
+    #modal-stats, #scores-stats {
+        font-size: 1em;
+    }
+
+    .modal-stat {
+        margin: 6px 0;
+    }
+
+    .modal-stat-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .modal-buttons button, #reset-scores {
+        padding: 8px 15px;
+        font-size: 0.9em;
+        max-width: 130px;
+    }
+
+    .icon-button .icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    #trophy-button {
+        left: 55px;
+    }
+}
+
+@media (max-width: 480px) {
+    #stats-panel {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .stat-item {
+        font-size: 0.9em;
+        width: 100%;
+        justify-content: flex-start;
+        margin: 4px 0;
+    }
+
+    .card {
+        min-width: 35px;
+        min-height: 35px;
+        border-radius: 8px;
+    }
+
+    .card.magic-card .progress-bar {
+        height: 4px;
+        width: 75%;
+    }
+
+    .card.spam-card .bomb {
+        width: 40px;
+        height: 40px;
+    }
+
+    .card.spam-card .countdown {
+        width: 14px;
+        height: 14px;
+        font-size: 8px;
+    }
+
+    .modal-content {
+        padding: 12px;
+        width: 90%;
+        max-width: 320px;
+    }
+
+    #modal-title, #scores-stats h2 {
+        font-size: 1.4em;
+    }
+
+    #modal-stats, #scores-stats {
+        font-size: 0.9em;
+    }
+
+    .modal-buttons button, #reset-scores {
+        padding: 6px 12px;
+        font-size: 0.85em;
+    }
+
+    .icon-button .icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    #trophy-button {
+        left: 50px;
+    }
+}
+
+@media (max-width: 320px) {
+    #stats-panel {
+        padding: 8px;
+    }
+
+    .stat-item {
+        font-size: 0.8em;
+    }
+
+    .stat-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    #message {
+        font-size: 1em;
+    }
+
+    .card {
+        min-width: 30px;
+        min-height: 30px;
+    }
+
+    .card.magic-card .progress-bar {
+        height: 3px;
+        width: 70%;
+    }
+
+    .card.spam-card .bomb {
+        width: 35px;
+        height: 35px;
+    }
+
+    .card.spam-card .countdown {
+        width: 12px;
+        height: 12px;
+        font-size: 7px;
+    }
+
+    .icon-button .icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    #trophy-button {
+        left: 45px;
+    }
+}

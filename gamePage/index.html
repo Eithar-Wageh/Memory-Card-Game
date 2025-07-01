@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fruit Match Game</title>
+    <link rel="stylesheet" href="styles.css?v=16">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+   
+</head>
+<body>
+    <div id="game-container">
+        <!-- Back button (Home icon) -->
+        <button id="back-button" class="icon-button" title="Back to Main Menu">
+            <svg class="icon" viewBox="0 0 24 24" fill="#FCD34D" stroke="#1E3A8A" stroke-width="1">
+                <path d="M10 22v-6h4v6h5V12h3L12 3 2 12h3v10z"/>
+            </svg>
+        </button>
+        <!-- Trophy button (Star in Circle) -->
+        <button id="trophy-button" class="icon-button" title="View Scores">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10" fill="#1E3A8A"/>
+                <path d="M12 4l2.4 7h7l-5.6 4.1 2.1 6.9-5.9-4.3-5.9 4.3 2.1-6.9L4 11h7z" fill="#F59E0B"/>
+            </svg>
+        </button>
+        <div id="stats-panel">
+            <div class="stat-item">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="4" fill="#1E3A8A"/>
+                    <path d="M12 6l1.2 3.5h3.5l-2.8 2.1 1.1 3.4-2.9-2.2-2.9 2.2 1.1-3.4-2.8-2.1h3.5z" fill="#F59E0B"/>
+                </svg>
+                <span class="stat-value" id="score">0</span>
+            </div>
+            <div class="stat-item">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="2">
+                    <path d="M22 10v6a2 2 0 01-2 2H4a2 2 0 01-2-2v-6a2 2 0 012-2h16a2 2 0 012 2zm-10 0V6m4 4V6"/>
+                </svg>
+                <span class="stat-value" id="moves">0</span>
+            </div>
+            <div class="stat-item">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                </svg>
+                <span class="stat-value" id="timer">0</span>
+            </div>
+            <div id="message"></div>
+        </div>
+        <div id="game-board">
+            <div id="game-grid"></div>
+        </div>
+        <div id="game-over-modal" class="modal">
+            <div class="modal-content">
+                <h2 id="modal-title">Congratulations!</h2>
+                <div id="modal-stats">
+                    <div class="modal-stat">
+                        <svg class="modal-stat-icon" viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="4" fill="#1E3A8A"/>
+                            <path d="M12 6l1.2 3.5h3.5l-2.8 2.1 1.1 3.4-2.9-2.2-2.9 2.2 1.1-3.4-2.8-2.1h3.5z" fill="#F59E0B"/>
+                        </svg>
+                        <span id="modal-score"></span>
+                    </div>
+                    <div class="modal-stat">
+                        <svg class="modal-stat-icon" viewBox="0 0 24 24" fill="none" stroke="#1E3A8A" stroke-width="2">
+                            <path d="M22 10v6a2 2 0 01-2 2H4a2 2 0 01-2-2v-6a2 2 0 012-2h16a2 2 0 012 2zm-10 0V6m4 4V6"/>
+                        </svg>
+                        <span id="modal-moves"></span>
+                    </div>
+                    <div class="modal-stat">
+                        <svg class="modal-stat-icon" viewBox="0 0 24 24" fill="none" stroke="#1E3A8A" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                        </svg>
+                        <span id="modal-time"></span>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button id="modal-main-menu">Main Menu</button>
+                    <button id="modal-play-again">Play Again</button>
+                </div>
+            </div>
+        </div>
+        <div id="scores-modal" class="modal">
+            <div class="modal-content">
+                <h2>Scores</h2>
+                <div id="scores-stats">
+                    <div class="modal-stat">
+                        <svg class="modal-stat-icon" viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="4" fill="#1E3A8A"/>
+                            <path d="M12 6l1.2 3.5h3.5l-2.8 2.1 1.1 3.4-2.9-2.2-2.9 2.2 1.1-3.4-2.8-2.1h3.5z" fill="#F59E0B"/>
+                        </svg>
+                        <span id="modal-high-score"></span>
+                    </div>
+                    <div id="modal-previous-scores">
+                        <h3>Previous Scores</h3>
+                        <ul id="previous-scores-list"></ul>
+                    </div>
+                    <button id="reset-scores">Reset Scores</button>
+                </div>
+                <div class="modal-buttons">
+                    <button id="close-scores">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="scores/scoreManager.js"></script>
+    <script src="cards/specialCards.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
