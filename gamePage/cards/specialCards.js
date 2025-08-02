@@ -146,7 +146,7 @@ const specialCards = {
                     c.style.backgroundImage = `url(${c.dataset.image})`;
                     setTimeout(() => {
                         if (!c.classList.contains('matched')) {
-                            c.style.backgroundImage = `url('../images/back.png')`;
+                            c.style.backgroundImage = `url('/Memory-Card-Game/images/back.png')`;
                         }
                     }, 2000);
                 }
@@ -192,7 +192,7 @@ const specialCards = {
     },
 
     applySpamEffect(card, cards, showMessage, playSound, matchedPairs, level) {
-        card.style.backgroundImage = `url('../images/spam.png')`;
+        card.style.backgroundImage = `url('/Memory-Card-Game/images/spam.png')`;
         const bomb = document.createElement('div');
         bomb.className = 'bomb';
         bomb.innerHTML = `
@@ -222,7 +222,7 @@ const specialCards = {
                     bomb.remove();
                     card.dataset.image = card.dataset.originalImage;
                     delete card.dataset.originalImage;
-                    card.style.backgroundImage = `url('../images/back.png')`;
+                    card.style.backgroundImage = `url('/Memory-Card-Game/images/back.png')`;
 
                     const effect = matchedPairs >= 2 && Math.random() < 0.5 ? 'flip' : 'shuffle';
                     if (effect === 'flip') {
@@ -230,7 +230,7 @@ const specialCards = {
                             if (c.classList.contains('matched')) {
                                 c.classList.remove('matched');
                                 c.classList.remove('flipped');
-                                c.style.backgroundImage = `url('../images/back.png')`;
+                                c.style.backgroundImage = `url(/Memory-Card-Game/images/back.png')`;
                                 c.style.border = '2px solid rgba(31, 41, 55, 0.4)';
                             }
                         });
@@ -264,7 +264,7 @@ const specialCards = {
                                 c.style.transform = '';
                                 delete c.dataset.initialPosition;
                                 if (!c.classList.contains('flipped') && !c.classList.contains('matched')) {
-                                    c.style.backgroundImage = `url('../images/back.png')`;
+                                    c.style.backgroundImage = `url('/Memory-Card-Game/images/back.png')`;
                                 }
                             });
                             showMessage('Spam Card shuffled the board!');
