@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     backButton.addEventListener('click', () => {
-        window.location.href = '/mainPage/index.html';
+        window.location.href = '../index.html';
     });
 
     trophyButton.addEventListener('click', () => {
@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modalMainMenu.onclick = () => {
             gameOverModal.style.display = 'none';
-            window.location.href = '/mainPage/index.html';
+            window.location.href = '../index.html';
         };
     }
 
