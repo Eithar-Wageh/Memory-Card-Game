@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   levelButtons.forEach(button => {
     button.addEventListener('click', () => {
       const level = button.dataset.level;
-      window.location.href = `gamePage/index.html?level=${level}`;
+      window.location.href = `./gamePage/index.html?level=${level}`;
     });
   });
 
