@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gameGrid.style.gap = '10px';
         gameGrid.innerHTML = '';
 
-        let availableImages = Array.from({ length: 16 }, (_, i) => `/images/${i + 1}.png`);
+        let availableImages = Array.from({ length: 16 }, (_, i) => `../images/${i + 1}.png`);
         let selectedImages = shuffleArray(availableImages).slice(0, pairs);
         let gameImages = selectedImages.flatMap(img => [img, img]);
         gameImages = shuffleArray(gameImages);
@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         setTimeout(() => {
             cards.forEach(card => {
-                card.style.backgroundImage = `url('/images/back.png')`;
+                card.style.backgroundImage = `url('../images/back.png')`;
             });
             isRevealing = false;
             startTimer();
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (this.classList.contains('spam-card')) {
             isBoardLocked = true;
-            this.style.backgroundImage = `url('/images/spam.png')`;
+            this.style.backgroundImage = `url('../images/spam.png')`;
             specialCards.applySpamEffect(this, cards, showMessage, playSound, matchedPairs, level);
             if (flippedCards.length === 1) {
                 console.log('Keeping flipped card after spam card:', flippedCards[0].dataset.image);
@@ -375,8 +375,8 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 card1.classList.remove('flipped');
                 card2.classList.remove('flipped');
-                card1.style.backgroundImage = `url('/images/back.png')`;
-                card2.style.backgroundImage = `url('/images/back.png')`;
+                card1.style.backgroundImage = `url('../images/back.png')`;
+                card2.style.backgroundImage = `url('../images/back.png')`;
                 card1.style.border = '2px solid rgba(31, 41, 55, 0.4)';
                 card2.style.border = '2px solid rgba(31, 41, 55, 0.4)';
             }, 500);
