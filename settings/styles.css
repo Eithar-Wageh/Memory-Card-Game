@@ -137,3 +137,48 @@
     transform: translateY(-2px);
     box-shadow: 0 3px 8px rgba(255, 255, 255, 0.2);
 }
+
+@media (max-width: 600px) {
+    .settings-options h3 {
+        font-size: 0.9em; /* تصغير العناوين */
+        margin: 8px 0 4px;
+    }
+
+    .setting {
+        font-size: 0.85em; /* تصغير النصوص */
+    }
+
+    .setting label {
+        font-size: 0.85em;
+    }
+
+    .setting input[type="checkbox"],
+    .setting input[type="radio"] {
+        width: 16px;
+        height: 16px;
+    }
+
+    .setting input[type="range"] {
+        max-width: 150px;
+    }
+
+    .setting select {
+        padding: 6px 10px;
+        font-size: 0.85em;
+    }
+
+    .setting .icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .game-mode-options label {
+        font-size: 0.85em;
+    }
+
+    #save-settings,
+    #close-settings-modal {
+        padding: 8px 20px; /* تصغير الأزرار */
+        font-size: 0.85em; /* تصغير الخط */
+    }
+}

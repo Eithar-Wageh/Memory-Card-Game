@@ -34,3 +34,4 @@ Developed by Eithar Wageh. Feel free to contribute or provide feedback!
 
 ## License
 This project is licensed under the MIT License.
+

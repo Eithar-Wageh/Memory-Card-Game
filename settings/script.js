@@ -63,8 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
         gameMode: document.querySelector('input[name="game-mode"]:checked')?.value || 'classic'
       };
       localStorage.setItem('gameSettings', JSON.stringify(settings));
-      if (settingsModal) settingsModal.style.display = 'none';
-      console.log('Settings saved:', settings);
+      settingsModal.style.display = 'none'; // إغلاق الـ modal بعد الحفظ
+      console.log('Settings saved and modal closed:', settings);
     });
   }
 

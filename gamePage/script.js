@@ -220,8 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
         gameGrid.style.gap = '10px';
         gameGrid.innerHTML = '';
 
-        let availableImages = Array.from({ length: 16 }, (_, i) => `../images/${i + 1}.png`);
-        let selectedImages = shuffleArray(availableImages).slice(0, pairs);
+        // Use all 32 images for 8x8, or a subset for smaller levels
+        let availableImages = Array.from({ length: 32 }, (_, i) => `../images/${i + 1}.png`);
+        let selectedImages = shuffleArray([...availableImages]).slice(0, pairs);
         let gameImages = selectedImages.flatMap(img => [img, img]);
         gameImages = shuffleArray(gameImages);
 
@@ -255,12 +256,24 @@ document.addEventListener('DOMContentLoaded', () => {
         consecutiveMatches = 0;
         lastMatchTime = 0;
 
+        // Check if back.png exists
+        const backImagePath = '../images/back.png';
+        const backImageTest = new Image();
+        backImageTest.src = backImagePath;
+        backImageTest.onerror = () => {
+            console.error(`Failed to load back.png at ${backImagePath}. Please ensure the file exists in memory card/images/`);
+            showMessage('Error: back.png not found. Please check the file path.');
+        };
+
         for (let i = 0; i < totalCards; i++) {
             const card = document.createElement('div');
             card.className = 'card';
             card.style.width = `${cardSize}px`;
             card.style.height = `${cardSize}px`;
-            card.dataset.image = gameImages[i];
+            card.dataset.image = gameImages[i]; // Assign image from gameImages
+            card.style.backgroundImage = `url(${backImagePath})`; // Start with back image
+            card.style.visibility = 'visible'; // Ensure all cards are visible
+            card.style.opacity = '1'; // Ensure full opacity
             card.addEventListener('click', flipCard);
             gameGrid.appendChild(card);
             cards.push(card);
@@ -282,11 +295,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         isRevealing = true;
         cards.forEach(card => {
-            card.style.backgroundImage = `url(${card.dataset.image})`;
+            card.style.backgroundImage = `url(${card.dataset.image})`; // Show actual image during reveal
+            card.style.visibility = 'visible';
+            card.style.opacity = '1';
         });
         setTimeout(() => {
             cards.forEach(card => {
-                card.style.backgroundImage = `url('../images/back.png')`;
+                card.style.backgroundImage = `url(${backImagePath})`; // Revert to back image
+                card.style.visibility = 'visible';
+                card.style.opacity = '1';
             });
             isRevealing = false;
             startTimer();
@@ -376,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 card1.classList.remove('flipped');
                 card2.classList.remove('flipped');
                 card1.style.backgroundImage = `url('../images/back.png')`;
-                card2.style.backgroundImage = `url('./images/back.png')`;
+                card2.style.backgroundImage = `url('../images/back.png')`;
                 card1.style.border = '2px solid rgba(31, 41, 55, 0.4)';
                 card2.style.border = '2px solid rgba(31, 41, 55, 0.4)';
             }, 500);
@@ -448,22 +465,22 @@ document.addEventListener('DOMContentLoaded', () => {
         let soundUrls = {};
         if (type === 'flip') {
             soundUrls.primary = 'https://www.soundjay.com/buttons/button-10.mp3';
-            soundUrls.fallback = 'https://cdn.pixabay.com/audio/2022/03/10/audio_948a50a891.mp3';
+            soundUrls.fallback = 'https://www.soundjay.com/buttons/button-09.mp3';
         } else if (type === 'match') {
-            soundUrls.primary = 'https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3';
-            soundUrls.fallback = 'https://www.soundjay.com/buttons/beep-07.mp3';
+            soundUrls.primary = 'https://www.soundjay.com/buttons/button-17.mp3';
+            soundUrls.fallback = 'https://www.soundjay.com/buttons/button-16.mp3';
         } else if (type === 'fail') {
             soundUrls.primary = 'https://www.soundjay.com/buttons/beep-03.mp3';
-            soundUrls.fallback = 'https://cdn.pixabay.com/audio/2022/03/10/audio_f6f343d8f0.mp3';
+            soundUrls.fallback = 'https://www.soundjay.com/buttons/beep-02.mp3';
         } else if (type === 'celebration') {
             soundUrls.primary = 'https://www.soundjay.com/human/applause-01.mp3';
-            soundUrls.fallback = 'https://cdn.pixabay.com/audio/2022/03/10/audio_7a38f3a3f0.mp3';
+            soundUrls.fallback = 'https://www.soundjay.com/human/applause-02.mp3';
         } else if (type === 'spam') {
-            soundUrls.primary = 'https://assets.mixkit.co/sfx/preview/mixkit-explosion-hit-1704.mp3';
-            soundUrls.fallback = 'https://www.soundjay.com/effects/explosion-02.mp3';
+            soundUrls.primary = 'https://www.soundjay.com/effects/explosion-02.mp3';
+            soundUrls.fallback = 'https://www.soundjay.com/effects/explosion-01.mp3';
         } else if (type === 'lose') {
-            soundUrls.primary = 'https://assets.mixkit.co/sfx/preview/mixkit-negative-tone-interface-2971.mp3';
-            soundUrls.fallback = 'https://www.soundjay.com/buttons/beep-02.mp3';
+            soundUrls.primary = 'https://www.soundjay.com/buttons/beep-02.mp3';
+            soundUrls.fallback = 'https://www.soundjay.com/buttons/beep-03.mp3';
         }
 
         if (!soundUrls.primary) {
@@ -475,44 +492,25 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Playing sound "${type}"${isFallback ? ' (fallback)' : ''}: ${url}`);
             const audio = new Audio(url);
             // Adjust volume for specific sounds
-            if (type === 'flip') {
-                audio.volume = 0.02* settings.volume / 100; // Very low volume for flip
+            if (type === 'flip' || type === 'match' || type === 'fail') {
+                audio.volume = 0.07 * settings.volume / 100; // Very low volume for flip, match, and fail
             } else if (type === 'lose') {
-                audio.volume = 0.4 * settings.volume / 100; // Lower volume for lose
+                audio.volume = 0.5 * settings.volume / 100; // Lower volume for lose
             } else {
                 audio.volume = settings.volume / 100; // Default volume for other sounds
             }
 
-            // For lose sound, play twice to extend duration
-            if (type === 'lose') {
-                audio.play().then(() => {
-                    setTimeout(() => {
-                        const secondAudio = new Audio(url);
-                        secondAudio.volume = audio.volume;
-                        secondAudio.play().catch(error => {
-                            console.error(`Failed to play second instance of sound "${type}": ${error.message}. URL: ${url}`);
-                        });
-                    }, audio.duration * 1000); // Play second time after first ends
-                }).catch(error => {
-                    console.error(`Failed to play sound "${type}"${isFallback ? ' (fallback)' : ''}: ${error.message}. URL: ${url}. Check for network issues, CORS, or Autoplay restrictions.`);
-                    if (!isFallback && soundUrls.fallback) {
-                        console.log(`Attempting fallback sound for "${type}": ${soundUrls.fallback}`);
-                        tryPlaySound(soundUrls.fallback, true);
-                    } else {
-                        showMessage(`Failed to play ${type} sound. Check console for details.`);
-                    }
-                });
-            } else {
-                audio.play().catch(error => {
-                    console.error(`Failed to play sound "${type}"${isFallback ? ' (fallback)' : ''}: ${error.message}. URL: ${url}. Check for network issues, CORS, or Autoplay restrictions.`);
-                    if (!isFallback && soundUrls.fallback) {
-                        console.log(`Attempting fallback sound for "${type}": ${soundUrls.fallback}`);
-                        tryPlaySound(soundUrls.fallback, true);
-                    } else {
-                        showMessage(`Failed to play ${type} sound. Check console for details.`);
-                    }
-                });
-            }
+            audio.play().then(() => {
+                console.log(`Successfully played sound "${type}"${isFallback ? ' (fallback)' : ''}: ${url}`);
+            }).catch(error => {
+                console.error(`Failed to play sound "${type}"${isFallback ? ' (fallback)' : ''}: ${error.message}. URL: ${url}. Check for network issues, CORS, or Autoplay restrictions.`);
+                if (!isFallback && soundUrls.fallback) {
+                    console.log(`Attempting fallback sound for "${type}": ${soundUrls.fallback}`);
+                    tryPlaySound(soundUrls.fallback, true);
+                } else {
+                    showMessage(`Failed to play ${type} sound. Check console for details.`);
+                }
+            });
         };
 
         tryPlaySound(soundUrls.primary);

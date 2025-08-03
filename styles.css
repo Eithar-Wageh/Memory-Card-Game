@@ -324,13 +324,13 @@ h2 {
 
 @media (max-width: 600px) {
     h1 {
-        font-size: 2.5em;
-        margin-bottom: 30px;
+        font-size: 2em; /* تصغير العنوان */
+        margin-bottom: 25px;
     }
 
     button {
-        padding: 12px 30px;
-        font-size: 1em;
+        padding: 10px 25px; /* تصغير الأزرار */
+        font-size: 0.9em; /* تصغير الخط */
     }
 
     .modal-content {

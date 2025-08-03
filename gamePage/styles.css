@@ -509,15 +509,15 @@ body::after {
     }
 
     .stat-item {
-        font-size: 1em;
+        font-size: 0.85em; /* تصغير النصوص */
         margin: 6px 0;
         flex: 1;
         justify-content: center;
     }
 
     .stat-icon {
-        width: 20px;
-        height: 20px;
+        width: 18px; /* تصغير الأيقونات */
+        height: 18px;
     }
 
     #message {
@@ -536,6 +536,8 @@ body::after {
     #game-grid {
         gap: 8px;
         padding: 8px;
+        margin: 0 auto; /* توسيط الشبكة */
+        max-width: 100%; /* منع التجاوز */
     }
 
     .card {
@@ -594,8 +596,16 @@ body::after {
         height: 28px;
     }
 
+    #back-button {
+        top: 12px;
+        right: 12px; /* نقل لليمين */
+        left: auto;
+    }
+
     #trophy-button {
-        left: 55px;
+        top: 12px;
+        right: 50px; /* نقل لليمين بجانب زر العودة */
+        left: auto;
     }
 }
 
@@ -607,10 +617,15 @@ body::after {
     }
 
     .stat-item {
-        font-size: 0.9em;
+        font-size: 0.8em; /* تصغير النصوص */
         width: 100%;
         justify-content: flex-start;
         margin: 4px 0;
+    }
+
+    .stat-icon {
+        width: 16px; /* تصغير الأيقونات */
+        height: 16px;
     }
 
     .card {
@@ -659,8 +674,16 @@ body::after {
         height: 24px;
     }
 
+    #back-button {
+        top: 10px;
+        right: 10px; /* نقل لليمين */
+        left: auto;
+    }
+
     #trophy-button {
-        left: 50px;
+        top: 10px;
+        right: 45px; /* نقل لليمين */
+        left: auto;
     }
 }
 
@@ -670,12 +693,12 @@ body::after {
     }
 
     .stat-item {
-        font-size: 0.8em;
+        font-size: 0.75em; /* تصغير النصوص */
     }
 
     .stat-icon {
-        width: 18px;
-        height: 18px;
+        width: 14px; /* تصغير الأيقونات */
+        height: 14px;
     }
 
     #message {
@@ -708,7 +731,15 @@ body::after {
         height: 22px;
     }
 
+    #back-button {
+        top: 8px;
+        right: 8px; /* نقل لليمين */
+        left: auto;
+    }
+
     #trophy-button {
-        left: 45px;
+        top: 8px;
+        right: 40px; /* نقل لليمين */
+        left: auto;
     }
 }
