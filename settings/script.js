@@ -50,28 +50,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (saveSettingsButton) {
     saveSettingsButton.addEventListener('click', () => {
-      if (!soundToggle || !volumeSlider || !themeSelect || !magicTimerSelect || !specialCardsRadios) {
-        console.error('One or more settings elements are missing');
-        return;
-      }
       const settings = {
-        sound: soundToggle.checked,
-        volume: parseInt(volumeSlider.value),
-        theme: themeSelect.value,
-        magicTimer: parseInt(magicTimerSelect.value),
-        specialCards: document.querySelector('input[name="special-cards"]:checked')?.value || 'classic',
-        gameMode: document.querySelector('input[name="game-mode"]:checked')?.value || 'classic'
+        sound: soundToggle ? soundToggle.checked : savedSettings.sound,
+        volume: volumeSlider ? parseInt(volumeSlider.value) : savedSettings.volume,
+        theme: themeSelect ? themeSelect.value : savedSettings.theme,
+        magicTimer: magicTimerSelect ? parseInt(magicTimerSelect.value) : savedSettings.magicTimer,
+        specialCards: document.querySelector('input[name="special-cards"]:checked')?.value || savedSettings.specialCards,
+        gameMode: document.querySelector('input[name="game-mode"]:checked')?.value || savedSettings.gameMode
       };
       localStorage.setItem('gameSettings', JSON.stringify(settings));
-      settingsModal.style.display = 'none'; // إغلاق الـ modal بعد الحفظ
-      console.log('Settings saved and modal closed:', settings);
+      if (settingsModal) {
+        settingsModal.style.display = 'none';
+        console.log('Settings saved and modal closed:', settings);
+      } else {
+        console.error('Settings modal not found when saving');
+      }
     });
   }
 
   if (closeSettingsModalButton) {
     closeSettingsModalButton.addEventListener('click', () => {
-      if (settingsModal) settingsModal.style.display = 'none';
-      console.log('Settings modal closed');
+      if (settingsModal) {
+        settingsModal.style.display = 'none';
+        console.log('Settings modal closed without saving');
+      }
     });
   }
 });
