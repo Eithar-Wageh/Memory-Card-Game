@@ -334,8 +334,9 @@ h2 {
     }
 
     .modal-content {
-        padding: 15px;
+        padding: 12px; /* تصغير الـ padding */
         width: 95%;
+        max-height: 90vh; /* تقليل الارتفاع لضمان العرض الكامل */
     }
 
     h2 {
@@ -347,16 +348,53 @@ h2 {
         padding: 12px;
     }
 
-    .match-pair {
-        width: 100%;
+    .how-to-play-content {
+        max-width: 100%; /* ضمان بقاء المحتوى داخل الـ modal */
+        box-sizing: border-box;
     }
 
-    .magic-example, .spam-example, .score-example, .settings-example {
-        flex-direction: column;
-        text-align: center;
+    .how-to-play-content h3 {
+        font-size: 0.95em; /* تصغير العناوين */
+        margin: 10px 0 5px;
     }
 
     .how-to-play-content p {
+        font-size: 0.75em; /* تصغير النصوص */
         min-width: 100%;
+    }
+
+    .match-example {
+        flex-direction: row; /* جعل الصور جنب بعض */
+        gap: 8px; /* تصغير المسافة بين الأزواج */
+    }
+
+    .match-pair {
+        width: 48%; /* عرض أقل لتظهر جنب بعض */
+        min-width: 140px; /* تصغير العرض الأدنى */
+        padding: 6px;
+    }
+
+    .match-pair img {
+        width: 35px; /* تصغير الصور */
+        height: 35px;
+    }
+
+    .match-pair .arrow {
+        width: 20px; /* تصغير السهم */
+        height: 15px;
+    }
+
+    .match-icon {
+        font-size: 0.9em; /* تصغير الأيقونة */
+    }
+
+    .magic-example, .spam-example, .score-example, .settings-example {
+        flex-direction: column; /* الإبقاء على الترتيب الرأسي لباقي العناصر */
+        text-align: center;
+    }
+
+    .magic-card, .spam-card {
+        width: 45px; /* تصغير الـ SVGs */
+        height: 45px;
     }
 }
